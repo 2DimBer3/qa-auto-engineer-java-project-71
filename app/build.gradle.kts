@@ -1,6 +1,6 @@
 plugins {
     application
-    id("java")
+    checkstyle
     id("com.github.ben-manes.versions") version "0.54.0"
 }
 
@@ -14,6 +14,7 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("info.picocli:picocli:4.7.7")
 }
 
 application {
