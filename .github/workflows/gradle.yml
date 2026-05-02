@@ -33,6 +33,11 @@ jobs:
         with:
           build-root-directory: app
 
+      - name: Make gradlew executable
+        run: |
+          chmod +x app/gradlew
+          ls -la app/gradlew
+
       - name: Build with Gradle Wrapper
         run: |
           cd app
