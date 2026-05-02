@@ -2,6 +2,7 @@ plugins {
     application
     checkstyle
     id("com.github.ben-manes.versions") version "0.54.0"
+    id("org.sonarqube") version "7.3.0.8198"
 }
 
 group = "hexlet.code"
@@ -20,6 +21,13 @@ dependencies {
 
 application {
     mainClass = "hexlet.code.App"
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "2DimBer3_qa-auto-engineer-java-project-71")
+        property("sonar.organization", "2dimber3")
+    }
 }
 
 tasks.test {

@@ -1,11 +1,11 @@
-run-app:
-	@gradle run --console=plain
+.PHONY: build
 
-installDist:
-	@gradlew installDist
-
-run-dist:
-	@build\install\app\bin\app
+build:
+	@gradlew clean build
 
 checkstyle:
-	@gradlew checkstyleMain
+	@gradlew checkstyleMain checkstyleTest
+
+run:
+	@gradlew installDist
+	@build\install\app\bin\app file1.json file2.json

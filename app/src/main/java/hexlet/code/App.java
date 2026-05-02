@@ -69,6 +69,6 @@ public class App implements Callable<Integer> {
 
     private Map<String, Object> parseJson(String content) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(content, new TypeReference<>() {});
+        return mapper.readValue(content, new TypeReference<>() { });
     }
 }
