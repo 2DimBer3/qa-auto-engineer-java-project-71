@@ -17,4 +17,48 @@
 
 ### Пример работы программы
 
-![img.png](app/images/img.png)
+#### Сравнение JSON-файлов
+
+<u>file1.json</u>
+```json
+{
+  "host": "hexlet.io",
+  "timeout": 50,
+  "proxy": "123.234.53.22",
+  "follow": false
+}
+```
+
+<u>**file2.json**</u>
+```json
+{
+  "timeout": 20,
+  "verbose": true,
+  "host": "hexlet.io"
+}
+```
+
+<u>Результат выполнения программы:</u>
+
+![img.png](app/images/json.png)
+
+#### Сравнение YAML-файлов
+
+<u>file1.yml</u>
+```yaml
+host: hexlet.io
+timeout: 50
+proxy: 123.234.53.22
+follow: false
+```
+
+<u>file2.yaml</u>
+```yaml
+timeout: 20
+verbose: true
+host: hexlet.io
+```
+
+<u>Результат выполнения программы:</u>
+
+![img.png](app/images/yaml.png)

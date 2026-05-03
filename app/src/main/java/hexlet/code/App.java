@@ -1,14 +1,13 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import picocli.CommandLine;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -16,16 +15,14 @@ import java.util.concurrent.Callable;
         description = "Compares two configuration files and shows a difference.")
 public class App implements Callable<Integer> {
 
+    @CommandLine.Parameters(paramLabel = "filepath1", description = "path to first file")
+    Path filepath1;
+    @CommandLine.Parameters(paramLabel = "filepath2", description = "path to second file")
+    Path filepath2;
     @CommandLine.Option(names = {"-f", "--format"},
             description = "output format [default: stylish]",
             defaultValue = "stylish")
     private String format;
-
-    @CommandLine.Parameters(paramLabel = "filepath1", description = "path to first file")
-    String filepath1;
-
-    @CommandLine.Parameters(paramLabel = "filepath2", description = "path to second file")
-    String filepath2;
 
     public static void main(String[] args) {
         int exitCode = new CommandLine(new App()).execute(args);
@@ -35,8 +32,8 @@ public class App implements Callable<Integer> {
     @Override
     public Integer call() {
         try {
-            Map<String, Object> data1 = parseFile(filepath1);
-            Map<String, Object> data2 = parseFile(filepath2);
+            Map<String, Object> data1 = loadFile(filepath1);
+            Map<String, Object> data2 = loadFile(filepath2);
 
             String diff = Differ.generate(data1, data2);
             System.out.println(diff);
@@ -49,26 +46,21 @@ public class App implements Callable<Integer> {
         }
     }
 
-    private Map<String, Object> parseFile(String filePath) throws IOException {
-        String content = readFile(filePath);
-        return parseJson(content);
-    }
-
-    private String readFile(String filePath) throws IOException {
-        String fileName = Paths.get(filePath).getFileName().toString();
-        Path resourcePath = Paths.get("src", "main", "resources", fileName)
-                .toAbsolutePath()
-                .normalize();
-
-        if (!Files.exists(resourcePath)) {
-            throw new IOException("File not found: " + resourcePath);
+    private Map<String, Object> loadFile(Path userPath) throws IOException {
+        // Физический файл
+        if (Files.exists(userPath)) {
+            return Parser.parseFile(userPath);
         }
 
-        return Files.readString(resourcePath);
+        // Поиск в ресурсах
+        String fileName = userPath.getFileName().toString();
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(fileName);
+        if (stream == null) {
+            throw new NoSuchFileException("File not found: " + userPath + " nor in resources as " + fileName);
+        }
+
+        String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        return Parser.parseContent(content, fileName);
     }
 
-    private Map<String, Object> parseJson(String content) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(content, new TypeReference<>() { });
-    }
 }

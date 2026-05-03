@@ -1,8 +1,12 @@
 .PHONY: build
 
-run:
+run-json:
 	@gradlew installDist
 	@build\install\app\bin\app file1.json file2.json
+
+run-yaml:
+	@gradlew installDist
+	@build\install\app\bin\app file1.yml file2.yml
 
 test:
 	@gradlew test jacocoTestCoverageVerification -i
