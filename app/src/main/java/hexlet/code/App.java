@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -34,9 +35,11 @@ public class App implements Callable<Integer> {
         try {
             Map<String, Object> data1 = loadFile(filepath1);
             Map<String, Object> data2 = loadFile(filepath2);
+            List<DiffEntry> diff = Differ.computeDiff(data1, data2);
 
-            String diff = Differ.generate(data1, data2);
-            System.out.println(diff);
+            Formatter formatter = getFormatter(format);
+            String output = formatter.format(diff);
+            System.out.println(output);
 
             return 0;
 
@@ -56,11 +59,19 @@ public class App implements Callable<Integer> {
         String fileName = userPath.getFileName().toString();
         InputStream stream = getClass().getClassLoader().getResourceAsStream(fileName);
         if (stream == null) {
-            throw new NoSuchFileException("File not found: " + userPath + " nor in resources as " + fileName);
+            throw new NoSuchFileException("File not found: " + userPath + " no in resources as " + fileName);
         }
 
         String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         return Parser.parseContent(content, fileName);
+    }
+
+    private Formatter getFormatter(String formatName) {
+        if ("stylish".equalsIgnoreCase(formatName)) {
+            return new StylishFormatter();
+        }
+
+        throw new IllegalArgumentException("Unknown format: " + formatName);
     }
 
 }

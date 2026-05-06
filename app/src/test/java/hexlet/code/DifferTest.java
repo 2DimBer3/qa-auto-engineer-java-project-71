@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
+import static hexlet.code.Differ.computeDiff;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DifferTest {
@@ -17,7 +19,7 @@ public class DifferTest {
         Map<String, Object> data1 = Parser.parseFile(getFixturePath("file1.json"));
         Map<String, Object> data2 = Parser.parseFile(getFixturePath("file2.json"));
 
-        String actual = Differ.generate(data1, data2);
+        String actual = generateStylishFormat(data1, data2);
         String expected = readFixtureFile("expected_diff.txt");
 
         assertEquals(normalizeLineEndings(expected), actual);
@@ -28,7 +30,7 @@ public class DifferTest {
         Map<String, Object> data1 = Parser.parseFile(getFixturePath("file1.yml"));
         Map<String, Object> data2 = Parser.parseFile(getFixturePath("file2.yml"));
 
-        String actual = Differ.generate(data1, data2);
+        String actual = generateStylishFormat(data1, data2);
         String expected = readFixtureFile("expected_diff.txt");
 
         assertEquals(normalizeLineEndings(expected), actual);
@@ -39,7 +41,7 @@ public class DifferTest {
         Map<String, Object> data1 = Map.of();
         Map<String, Object> data2 = Map.of();
 
-        String actual = Differ.generate(data1, data2);
+        String actual = generateStylishFormat(data1, data2);
         String expected = "{\n}";
 
         assertEquals(expected, actual);
@@ -50,11 +52,23 @@ public class DifferTest {
         Map<String, Object> data1 = Parser.parseFile(getFixturePath("same_file_1.json"));
         Map<String, Object> data2 = Parser.parseFile(getFixturePath("same_file_2.json"));
 
-        String actual = Differ.generate(data1, data2);
+        String actual = generateStylishFormat(data1, data2);
         String expected = readFixtureFile("expected_diff_same_file.txt");
 
         assertEquals(normalizeLineEndings(expected), actual);
     }
+
+    @Test
+    public void testStylishFormat() throws Exception {
+        Map<String, Object> data1 = Parser.parseFile(getFixturePath("file1_stylish.json"));
+        Map<String, Object> data2 = Parser.parseFile(getFixturePath("file2_stylish.json"));
+
+        String actual = generateStylishFormat(data1, data2);
+        String expected = readFixtureFile("expected_diff_stylish.txt");
+
+        assertEquals(normalizeLineEndings(expected), actual);
+    }
+
 
     private static String readFixtureFile(String fileName) throws IOException {
         Path path = getFixturePath(fileName);
@@ -68,6 +82,11 @@ public class DifferTest {
 
     private static String normalizeLineEndings(String s) {
         return s.replace("\r\n", "\n").replace("\r", "\n");
+    }
+
+    private static String generateStylishFormat(Map<String, Object> data1, Map<String, Object> data2) {
+        List<DiffEntry> diff = computeDiff(data1, data2);
+        return new StylishFormatter().format(diff);
     }
 
 }

@@ -1,50 +1,43 @@
 package hexlet.code;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static hexlet.code.DiffEntryType.UNCHANGED;
+import static hexlet.code.DiffEntryType.CHANGED;
+import static hexlet.code.DiffEntryType.REMOVED;
+import static hexlet.code.DiffEntryType.ADDED;
+
 public class Differ {
 
-    public static String generate(Map<String, Object> data1, Map<String, Object> data2) {
-        StringBuilder result = new StringBuilder();
-
-        // Получаем все уникальные ключи из обоих файлов, отсортированные по алфавиту
+    public static List<DiffEntry> computeDiff(Map<String, Object> data1, Map<String, Object> data2) {
+        List<DiffEntry> entries = new ArrayList<>();
         Set<String> allKeys = new TreeSet<>();
         allKeys.addAll(data1.keySet());
         allKeys.addAll(data2.keySet());
-
-        result.append("{\n");
 
         for (String key : allKeys) {
             boolean inFile1 = data1.containsKey(key);
             boolean inFile2 = data2.containsKey(key);
 
             if (inFile1 && inFile2) {
-                // Ключ есть в обоих файлах
                 Object value1 = data1.get(key);
                 Object value2 = data2.get(key);
-
                 if (isEqual(value1, value2)) {
-                    // Значения совпадают
-                    result.append("    ").append(key).append(": ").append(value1).append("\n");
+                    entries.add(new DiffEntry(key, UNCHANGED, null, value1));
                 } else {
-                    // Значения различаются
-                    result.append("  - ").append(key).append(": ").append(value1).append("\n");
-                    result.append("  + ").append(key).append(": ").append(value2).append("\n");
+                    entries.add(new DiffEntry(key, CHANGED, value1, value2));
                 }
             } else if (inFile1) {
-                // Ключ есть только в первом файле
-                result.append("  - ").append(key).append(": ").append(data1.get(key)).append("\n");
+                entries.add(new DiffEntry(key, REMOVED, data1.get(key), null));
             } else {
-                // Ключ есть только во втором файле
-                result.append("  + ").append(key).append(": ").append(data2.get(key)).append("\n");
+                entries.add(new DiffEntry(key, ADDED, null, data2.get(key)));
             }
         }
-
-        result.append("}");
-
-        return result.toString();
+        return entries;
     }
 
     private static boolean isEqual(Object value1, Object value2) {
