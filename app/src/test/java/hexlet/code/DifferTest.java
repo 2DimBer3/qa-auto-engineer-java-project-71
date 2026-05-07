@@ -109,6 +109,7 @@ public class DifferTest {
                 Property 'host' was updated. From 'hexlet.io' to 'hexlet.ru'
                 Property 'timeout' was updated. From 50 to 20
                 Property 'verbose' was added with value: true""";
+
         assertEquals(expected, actual);
     }
 
