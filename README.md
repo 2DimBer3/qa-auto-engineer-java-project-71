@@ -70,7 +70,7 @@ host: hexlet.io
 
 #### Сравнение вложенных JSON/YAML (stylish)
 
-<u>file1_stylish.json</u>
+<u>file1_test_format.json</u>
 
 ```json
 {
@@ -111,7 +111,7 @@ host: hexlet.io
 }
 ```
 
-<u>file2_stylish.json</u>
+<u>file2_test_format.json</u>
 
 ```json
 {
@@ -158,3 +158,94 @@ host: hexlet.io
 <u>Результат выполнения программы:</u>
 
 ![img.png](app/images/stylish.png)
+
+#### Сравнение вложенных JSON/YAML (plain)
+
+<u>file1_test_format.json</u>
+
+```json
+{
+  "setting1": "Some value",
+  "setting2": 200,
+  "setting3": true,
+  "key1": "value1",
+  "numbers1": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "numbers2": [
+    2,
+    3,
+    4,
+    5
+  ],
+  "id": 45,
+  "default": null,
+  "checked": false,
+  "numbers3": [
+    3,
+    4,
+    5
+  ],
+  "chars1": [
+    "a",
+    "b",
+    "c"
+  ],
+  "chars2": [
+    "d",
+    "e",
+    "f"
+  ]
+}
+```
+
+<u>file2_test_format.json</u>
+
+```json
+{
+  "setting1": "Another value",
+  "setting2": 300,
+  "setting3": "none",
+  "key2": "value2",
+  "numbers1": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "numbers2": [
+    22,
+    33,
+    44,
+    55
+  ],
+  "id": null,
+  "default": [
+    "value1",
+    "value2"
+  ],
+  "checked": true,
+  "numbers4": [
+    4,
+    5,
+    6
+  ],
+  "chars1": [
+    "a",
+    "b",
+    "c"
+  ],
+  "chars2": false,
+  "obj1": {
+    "nestedKey": "value",
+    "isNested": true
+  }
+}
+```
+
+<u>Результат выполнения программы:</u>
+
+![img.png](app/images/plain.png)

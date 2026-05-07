@@ -10,7 +10,11 @@ run-yaml:
 
 run-stylish:
 	@gradlew installDist
-	@build\install\app\bin\app file1_stylish.json file2_stylish.json
+	@build\install\app\bin\app file1_test_format.json file2_test_format.json
+
+run-plain:
+	@gradlew installDist
+	@build\install\app\bin\app -f plain file1_test_format.json file2_test_format.json
 
 test:
 	@gradlew test jacocoTestCoverageVerification -i

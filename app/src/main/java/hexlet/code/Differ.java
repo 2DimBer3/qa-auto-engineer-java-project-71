@@ -40,6 +40,11 @@ public class Differ {
         return entries;
     }
 
+    public static String generate(Map<String, Object> data1, Map<String, Object> data2, String format) {
+        List<DiffEntry> diff = computeDiff(data1, data2);
+        return Formatter.getFormatter(format).format(diff);
+    }
+
     private static boolean isEqual(Object value1, Object value2) {
         if (value1 == null && value2 == null) {
             return true;
