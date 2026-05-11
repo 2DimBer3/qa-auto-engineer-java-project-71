@@ -1,10 +1,12 @@
 package hexlet.code;
 
+import hexlet.code.formatters.JsonFormatter;
 import hexlet.code.formatters.PlainFormatter;
 import hexlet.code.formatters.StylishFormatter;
 
 import java.util.List;
 
+import static hexlet.code.formatters.JsonFormatter.JSON_FORMAT;
 import static hexlet.code.formatters.PlainFormatter.PLAIN_FORMAT;
 import static hexlet.code.formatters.StylishFormatter.STYLISH_FORMAT;
 
@@ -13,12 +15,17 @@ public interface Formatter {
     String format(List<DiffEntry> diff);
 
     static Formatter getFormatter(String formatName) {
-        if (STYLISH_FORMAT.equalsIgnoreCase(formatName)) {
-            return new StylishFormatter();
-        } else if (PLAIN_FORMAT.equalsIgnoreCase(formatName)) {
-            return new PlainFormatter();
+        switch (formatName) {
+            case STYLISH_FORMAT -> {
+                return new StylishFormatter();
+            }
+            case PLAIN_FORMAT -> {
+                return new PlainFormatter();
+            }
+            case JSON_FORMAT -> {
+                return new JsonFormatter();
+            }
+            default -> throw new IllegalArgumentException("Unknown format: " + formatName);
         }
-
-        throw new IllegalArgumentException("Unknown format: " + formatName);
     }
 }

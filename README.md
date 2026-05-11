@@ -249,3 +249,96 @@ host: hexlet.io
 <u>Результат выполнения программы:</u>
 
 ![img.png](app/images/plain.png)
+
+#### Сравнение вложенных JSON/YAML (json)
+
+<u>file1_test_format.json</u>
+
+```json
+{
+  "setting1": "Some value",
+  "setting2": 200,
+  "setting3": true,
+  "key1": "value1",
+  "numbers1": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "numbers2": [
+    2,
+    3,
+    4,
+    5
+  ],
+  "id": 45,
+  "default": null,
+  "checked": false,
+  "numbers3": [
+    3,
+    4,
+    5
+  ],
+  "chars1": [
+    "a",
+    "b",
+    "c"
+  ],
+  "chars2": [
+    "d",
+    "e",
+    "f"
+  ]
+}
+```
+
+<u>file2_test_format.json</u>
+
+```json
+{
+  "setting1": "Another value",
+  "setting2": 300,
+  "setting3": "none",
+  "key2": "value2",
+  "numbers1": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "numbers2": [
+    22,
+    33,
+    44,
+    55
+  ],
+  "id": null,
+  "default": [
+    "value1",
+    "value2"
+  ],
+  "checked": true,
+  "numbers4": [
+    4,
+    5,
+    6
+  ],
+  "chars1": [
+    "a",
+    "b",
+    "c"
+  ],
+  "chars2": false,
+  "obj1": {
+    "nestedKey": "value",
+    "isNested": true
+  }
+}
+```
+
+<u>Результат выполнения программы:</u>
+
+![img.png](app/images/format_json_1.png)
+![img_1.png](app/images/format_json_2.png)
+![img_2.png](app/images/format_json_3.png)

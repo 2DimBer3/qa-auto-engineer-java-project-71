@@ -14,22 +14,14 @@ public class PlainFormatter implements Formatter {
         StringBuilder sb = new StringBuilder();
         for (DiffEntry entry : diff) {
             switch (entry.getType()) {
-                case UNCHANGED:
-                    break;
-                case CHANGED:
-                    sb.append("Property '").append(entry.getKey()).append("' was updated. From ")
+                case UNCHANGED -> { }
+                case CHANGED -> sb.append("Property '").append(entry.getKey()).append("' was updated. From ")
                             .append(stringify(entry.getOldValue())).append(" to ")
                             .append(stringify(entry.getNewValue())).append("\n");
-                    break;
-                case REMOVED:
-                    sb.append("Property '").append(entry.getKey()).append("' was removed").append("\n");
-                    break;
-                case ADDED:
-                    sb.append("Property '").append(entry.getKey()).append("' was added with value: ")
+                case REMOVED -> sb.append("Property '").append(entry.getKey()).append("' was removed").append("\n");
+                case ADDED -> sb.append("Property '").append(entry.getKey()).append("' was added with value: ")
                             .append(stringify(entry.getNewValue())).append("\n");
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown type: " + entry.getType());
+                default -> throw new IllegalArgumentException("Unknown type: " + entry.getType());
             }
         }
 

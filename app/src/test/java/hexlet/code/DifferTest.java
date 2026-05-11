@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.formatters.JsonFormatter;
 import hexlet.code.formatters.PlainFormatter;
 import hexlet.code.formatters.StylishFormatter;
 import org.junit.jupiter.api.Test;
@@ -71,7 +72,7 @@ public class DifferTest {
 
         List<DiffEntry> diff = Differ.computeDiff(data1, data2);
         String actual = new StylishFormatter().format(diff);
-        String expected = readFixtureFile("expected_diff_stylish.txt");
+        String expected = readFixtureFile("expected_diff_format_stylish.txt");
 
         assertEquals(normalizeLineEndings(expected), actual);
     }
@@ -83,7 +84,7 @@ public class DifferTest {
 
         List<DiffEntry> diff = Differ.computeDiff(data1, data2);
         String actual = new PlainFormatter().format(diff);
-        String expected = readFixtureFile("expected_diff_plain.txt");
+        String expected = readFixtureFile("expected_diff_format_plain.txt");
 
         assertEquals(normalizeLineEndings(expected), actual);
     }
@@ -146,6 +147,19 @@ public class DifferTest {
                 }""";
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void testJsonFormat() throws Exception {
+        Map<String, Object> data1 = Parser.parseFile(getFixturePath("file1_test_format.json"));
+        Map<String, Object> data2 = Parser.parseFile(getFixturePath("file2_test_format.json"));
+
+        List<DiffEntry> diff = Differ.computeDiff(data1, data2);
+        String actual = new JsonFormatter().format(diff);
+        System.out.println("ACTUAL: \n" + actual);
+        String expected = readFixtureFile("expected_diff_format_json.txt");
+
+        assertEquals(normalizeLineEndings(expected), normalizeLineEndings(actual));
     }
 
     private static String readFixtureFile(String fileName) throws IOException {

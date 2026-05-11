@@ -14,26 +14,19 @@ public class StylishFormatter implements Formatter {
         StringBuilder sb = new StringBuilder("{\n");
         for (DiffEntry entry : diff) {
             switch (entry.getType()) {
-                case UNCHANGED:
-                    sb.append("    ").append(entry.getKey()).append(": ")
+                case UNCHANGED -> sb.append("    ").append(entry.getKey()).append(": ")
                             .append(stringify(entry.getNewValue())).append("\n");
-                    break;
-                case CHANGED:
+                case CHANGED -> {
                     sb.append("  - ").append(entry.getKey()).append(": ")
                             .append(stringify(entry.getOldValue())).append("\n");
                     sb.append("  + ").append(entry.getKey()).append(": ")
                             .append(stringify(entry.getNewValue())).append("\n");
-                    break;
-                case REMOVED:
-                    sb.append("  - ").append(entry.getKey()).append(": ")
+                }
+                case REMOVED -> sb.append("  - ").append(entry.getKey()).append(": ")
                             .append(stringify(entry.getOldValue())).append("\n");
-                    break;
-                case ADDED:
-                    sb.append("  + ").append(entry.getKey()).append(": ")
+                case ADDED -> sb.append("  + ").append(entry.getKey()).append(": ")
                             .append(stringify(entry.getNewValue())).append("\n");
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown type: " + entry.getType());
+                default -> throw new IllegalArgumentException("Unknown type: " + entry.getType());
             }
         }
         sb.append("}");
