@@ -94,7 +94,8 @@ public class DifferTest {
         Map<String, Object> data1 = Map.of("a", 1, "b", "text");
         Map<String, Object> data2 = Map.of("a", 1, "b", "new_text");
 
-        String actual = Differ.generate(data1, data2, "stylish");
+        List<DiffEntry> diff = Differ.computeDiff(data1, data2);
+        String actual = new StylishFormatter().format(diff);
         String expected = "{\n    a: 1\n  - b: text\n  + b: new_text\n}";
 
         assertEquals(expected, actual);
@@ -105,7 +106,8 @@ public class DifferTest {
         Map<String, Object> data1 = Map.of("host", "hexlet.io", "timeout", 50);
         Map<String, Object> data2 = Map.of("host", "hexlet.ru", "timeout", 20, "verbose", true);
 
-        String actual = Differ.generate(data1, data2, "plain");
+        List<DiffEntry> diff = Differ.computeDiff(data1, data2);
+        String actual = new PlainFormatter().format(diff);
         String expected = """
                 Property 'host' was updated. From 'hexlet.io' to 'hexlet.ru'
                 Property 'timeout' was updated. From 50 to 20
@@ -124,7 +126,8 @@ public class DifferTest {
         data2.put("debug", false);
         data2.put("mode", "full");
 
-        String actual = Differ.generate(data1, data2, "plain");
+        List<DiffEntry> diff = Differ.computeDiff(data1, data2);
+        String actual = new PlainFormatter().format(diff);
         String expected = """
                 Property 'debug' was updated. From true to false
                 Property 'mode' was updated. From null to 'full'""";
@@ -137,7 +140,8 @@ public class DifferTest {
         Map<String, Object> data1 = Map.of("items", "[1,2]", "config", "{key=val}");
         Map<String, Object> data2 = Map.of("items", "[3,4]", "config", "{key=newVal}");
 
-        String actual = Differ.generate(data1, data2, "stylish");
+        List<DiffEntry> diff = Differ.computeDiff(data1, data2);
+        String actual = new StylishFormatter().format(diff);
         String expected = """
                 {
                   - config: {key=val}

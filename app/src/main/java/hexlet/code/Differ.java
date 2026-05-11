@@ -1,5 +1,11 @@
 package hexlet.code;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +46,10 @@ public class Differ {
         return entries;
     }
 
-    public static String generate(Map<String, Object> data1, Map<String, Object> data2, String format) {
+    public static String generate(String filepath1, String filepath2, String format) throws IOException {
+        Map<String, Object> data1 = loadFile(Path.of(filepath1));
+        Map<String, Object> data2 = loadFile(Path.of(filepath2));
+
         List<DiffEntry> diff = computeDiff(data1, data2);
         return Formatter.getFormatter(format).format(diff);
     }
@@ -53,5 +62,22 @@ public class Differ {
             return false;
         }
         return value1.equals(value2);
+    }
+
+    private static Map<String, Object> loadFile(Path userPath) throws IOException {
+        // Физический файл
+        if (Files.exists(userPath)) {
+            return Parser.parseFile(userPath);
+        }
+
+        // Поиск в ресурсах
+        String fileName = userPath.getFileName().toString();
+        InputStream stream = App.class.getClassLoader().getResourceAsStream(fileName);
+        if (stream == null) {
+            throw new NoSuchFileException("File not found: " + userPath + " no in resources as " + fileName);
+        }
+
+        String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        return Parser.parseContent(content, fileName);
     }
 }
