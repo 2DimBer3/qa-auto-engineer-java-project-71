@@ -16,6 +16,7 @@ import static hexlet.code.DiffEntryType.UNCHANGED;
 import static hexlet.code.DiffEntryType.CHANGED;
 import static hexlet.code.DiffEntryType.REMOVED;
 import static hexlet.code.DiffEntryType.ADDED;
+import static hexlet.code.formatters.StylishFormatter.STYLISH_FORMAT;
 
 public class Differ {
 
@@ -52,6 +53,10 @@ public class Differ {
 
         List<DiffEntry> diff = computeDiff(data1, data2);
         return Formatter.getFormatter(format).format(diff);
+    }
+
+    public static String generate(String filepath1, String filepath2) throws IOException {
+        return generate(filepath1, filepath2, STYLISH_FORMAT);
     }
 
     private static boolean isEqual(Object value1, Object value2) {
