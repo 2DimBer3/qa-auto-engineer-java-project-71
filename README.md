@@ -2,6 +2,11 @@
 
 [![Actions Status](https://github.com/2DimBer3/qa-auto-engineer-java-project-71/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/2DimBer3/qa-auto-engineer-java-project-71/actions)
 
+### GitHub Actions for App
+
+[![Java CI with Gradle](https://github.com/2DimBer3/qa-auto-engineer-java-project-71/actions/workflows/gradle.yml/badge.svg)](https://github.com/2DimBer3/qa-auto-engineer-java-project-71/actions/workflows/gradle.yml)
+[![SonarQube](https://github.com/2DimBer3/qa-auto-engineer-java-project-71/actions/workflows/build.yml/badge.svg)](https://github.com/2DimBer3/qa-auto-engineer-java-project-71/actions/workflows/build.yml)
+
 ### Sonar badges
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=2DimBer3_qa-auto-engineer-java-project-71&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=2DimBer3_qa-auto-engineer-java-project-71)
