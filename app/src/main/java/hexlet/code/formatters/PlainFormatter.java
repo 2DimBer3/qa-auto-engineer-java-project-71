@@ -5,7 +5,7 @@ import hexlet.code.Formatter;
 
 import java.util.List;
 
-public class PlainFormatter implements Formatter {
+public final class PlainFormatter implements Formatter {
 
     public static final String PLAIN_FORMAT = "plain";
 

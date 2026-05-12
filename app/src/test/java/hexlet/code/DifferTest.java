@@ -103,8 +103,11 @@ public class DifferTest {
 
     @Test
     public void testGeneratePlain() {
-        Map<String, Object> data1 = Map.of("host", "hexlet.io", "timeout", 50);
-        Map<String, Object> data2 = Map.of("host", "hexlet.ru", "timeout", 20, "verbose", true);
+        int timeout1 = 50;
+        int timeout2 = 20;
+
+        Map<String, Object> data1 = Map.of("host", "hexlet.io", "timeout", timeout1);
+        Map<String, Object> data2 = Map.of("host", "hexlet.ru", "timeout", timeout2, "verbose", true);
 
         List<DiffEntry> diff = Differ.computeDiff(data1, data2);
         String actual = new PlainFormatter().format(diff);

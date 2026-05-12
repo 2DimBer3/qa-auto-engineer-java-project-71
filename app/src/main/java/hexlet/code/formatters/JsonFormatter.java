@@ -8,7 +8,7 @@ import hexlet.code.Formatter;
 
 import java.util.List;
 
-public class JsonFormatter implements Formatter {
+public final class JsonFormatter implements Formatter {
 
     public static final String JSON_FORMAT = "json";
     private static final ObjectMapper MAPPER = new ObjectMapper();
