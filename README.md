@@ -48,7 +48,7 @@
 
 <u>Результат выполнения программы:</u>
 
-![img.png](app/images/json.png)
+![img.png](images/json.png)
 
 #### Сравнение YAML-файлов
 
@@ -71,7 +71,7 @@ host: hexlet.io
 
 <u>Результат выполнения программы:</u>
 
-![img.png](app/images/yaml.png)
+![img.png](images/yaml.png)
 
 #### Сравнение вложенных JSON/YAML (stylish)
 
@@ -162,7 +162,7 @@ host: hexlet.io
 
 <u>Результат выполнения программы:</u>
 
-![img.png](app/images/stylish.png)
+![img.png](images/stylish.png)
 
 #### Сравнение вложенных JSON/YAML (plain)
 
@@ -253,7 +253,7 @@ host: hexlet.io
 
 <u>Результат выполнения программы:</u>
 
-![img.png](app/images/plain.png)
+![img.png](images/plain.png)
 
 #### Сравнение вложенных JSON/YAML (json)
 
@@ -344,6 +344,6 @@ host: hexlet.io
 
 <u>Результат выполнения программы:</u>
 
-![img.png](app/images/format_json_1.png)
-![img_1.png](app/images/format_json_2.png)
-![img_2.png](app/images/format_json_3.png)
+![img.png](images/format_json_1.png)
+![img_1.png](images/format_json_2.png)
+![img_2.png](images/format_json_3.png)
