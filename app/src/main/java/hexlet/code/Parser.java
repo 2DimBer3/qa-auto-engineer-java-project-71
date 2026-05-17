@@ -6,13 +6,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Parser {
 
     public static Map<String, Object> parseContent(String content, String fileName) throws IOException {
+        if (content == null || content.isBlank()) {
+            return new LinkedHashMap<>();
+        }
+
         String lowerName = fileName.toLowerCase();
         if (lowerName.endsWith(".json")) {
             return parseJson(content);
@@ -21,12 +24,6 @@ public class Parser {
         } else {
             throw new IllegalArgumentException("Unsupported file format: " + fileName);
         }
-    }
-
-    public static Map<String, Object> parseFile(Path filePath) throws IOException {
-        String content = Files.readString(filePath);
-        String fileName = filePath.getFileName().toString();
-        return parseContent(content, fileName);
     }
 
     private static Map<String, Object> parseJson(String content) throws JsonProcessingException {

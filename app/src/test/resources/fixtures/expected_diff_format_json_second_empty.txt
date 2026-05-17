@@ -1,0 +1,49 @@
+[ {
+  "key" : "chars1",
+  "type" : "REMOVED",
+  "value" : [ "a", "b", "c" ]
+}, {
+  "key" : "chars2",
+  "type" : "REMOVED",
+  "value" : [ "d", "e", "f" ]
+}, {
+  "key" : "checked",
+  "type" : "REMOVED",
+  "value" : false
+}, {
+  "key" : "default",
+  "type" : "REMOVED",
+  "value" : null
+}, {
+  "key" : "id",
+  "type" : "REMOVED",
+  "value" : 45
+}, {
+  "key" : "key1",
+  "type" : "REMOVED",
+  "value" : "value1"
+}, {
+  "key" : "numbers1",
+  "type" : "REMOVED",
+  "value" : [ 1, 2, 3, 4 ]
+}, {
+  "key" : "numbers2",
+  "type" : "REMOVED",
+  "value" : [ 2, 3, 4, 5 ]
+}, {
+  "key" : "numbers3",
+  "type" : "REMOVED",
+  "value" : [ 3, 4, 5 ]
+}, {
+  "key" : "setting1",
+  "type" : "REMOVED",
+  "value" : "Some value"
+}, {
+  "key" : "setting2",
+  "type" : "REMOVED",
+  "value" : 200
+}, {
+  "key" : "setting3",
+  "type" : "REMOVED",
+  "value" : true
+} ]

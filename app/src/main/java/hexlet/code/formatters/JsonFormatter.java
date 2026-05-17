@@ -1,12 +1,12 @@
 package hexlet.code.formatters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import hexlet.code.DiffEntry;
 import hexlet.code.Formatter;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class JsonFormatter implements Formatter {
 
@@ -15,26 +15,35 @@ public final class JsonFormatter implements Formatter {
 
     @Override
     public String format(List<DiffEntry> diff) {
-        ArrayNode array = MAPPER.createArrayNode();
+        return writeValueAsString(diffToPlainList(diff));
+    }
 
-        for (DiffEntry entry : diff) {
-            ObjectNode node = MAPPER.createObjectNode();
-            node.put("key", entry.getKey());
-            node.put("type", String.valueOf(entry.getType()));
-            switch (entry.getType()) {
-                case UNCHANGED, ADDED -> node.putPOJO("value", entry.getNewValue());
-                case CHANGED -> {
-                    node.putPOJO("oldValue", entry.getOldValue());
-                    node.putPOJO("newValue", entry.getNewValue());
-                }
-                case REMOVED -> node.putPOJO("value", entry.getOldValue());
-                default -> throw new IllegalArgumentException("Unknown type: " + entry.getType());
+    private static List<Map<String, Object>> diffToPlainList(List<DiffEntry> diff) {
+        return diff.stream()
+                .map(JsonFormatter::diffEntryToMap)
+                .toList();
+    }
+
+    private static Map<String, Object> diffEntryToMap(DiffEntry entry) {
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("key", entry.getKey());
+        map.put("type", entry.getType().toString());
+
+        switch (entry.getType()) {
+            case UNCHANGED, ADDED -> map.put("value", entry.getNewValue());
+            case CHANGED -> {
+                map.put("oldValue", entry.getOldValue());
+                map.put("newValue", entry.getNewValue());
             }
-            array.add(node);
+            case REMOVED -> map.put("value", entry.getOldValue());
+            default -> throw new IllegalArgumentException("Unknown type: " + entry.getType());
         }
+        return map;
+    }
 
+    private static String writeValueAsString(Object data) {
         try {
-            return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(array);
+            return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(data);
         } catch (Exception e) {
             throw new RuntimeException("Failed to format JSON", e);
         }
