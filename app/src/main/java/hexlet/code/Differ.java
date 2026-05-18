@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.diffentry.DiffEntry;
 import hexlet.code.formatters.Formatter;
 
 import java.io.IOException;

@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.diffentry.DiffEntry;
 import hexlet.code.formatters.Formatter;
 import hexlet.code.formatters.JsonFormatter;
 import hexlet.code.formatters.PlainFormatter;

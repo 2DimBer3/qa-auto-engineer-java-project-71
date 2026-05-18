@@ -1,15 +1,19 @@
 package hexlet.code;
 
+import hexlet.code.diffentry.DiffEntry;
+import hexlet.code.diffentry.DiffEntryChanged;
+import hexlet.code.diffentry.DiffEntrySimple;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static hexlet.code.DiffEntryType.CHANGED;
-import static hexlet.code.DiffEntryType.UNCHANGED;
-import static hexlet.code.DiffEntryType.REMOVED;
-import static hexlet.code.DiffEntryType.ADDED;
+import static hexlet.code.diffentry.DiffEntryType.UNCHANGED;
+import static hexlet.code.diffentry.DiffEntryType.CHANGED;
+import static hexlet.code.diffentry.DiffEntryType.REMOVED;
+import static hexlet.code.diffentry.DiffEntryType.ADDED;
 
 public class DiffComputer {
     public static List<DiffEntry> computeDiff(Map<String, Object> data1, Map<String, Object> data2) {
@@ -26,14 +30,14 @@ public class DiffComputer {
                 Object value1 = data1.get(key);
                 Object value2 = data2.get(key);
                 if (isEqual(value1, value2)) {
-                    entries.add(new DiffEntry(key, UNCHANGED, null, value1));
+                    entries.add(new DiffEntrySimple(key, UNCHANGED, value1));
                 } else {
-                    entries.add(new DiffEntry(key, CHANGED, value1, value2));
+                    entries.add(new DiffEntryChanged(key, CHANGED, value1, value2));
                 }
             } else if (inFile1) {
-                entries.add(new DiffEntry(key, REMOVED, data1.get(key), null));
+                entries.add(new DiffEntrySimple(key, REMOVED, data1.get(key)));
             } else {
-                entries.add(new DiffEntry(key, ADDED, null, data2.get(key)));
+                entries.add(new DiffEntrySimple(key, ADDED, data2.get(key)));
             }
         }
         return entries;
