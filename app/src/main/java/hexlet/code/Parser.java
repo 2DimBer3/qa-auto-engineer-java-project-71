@@ -11,18 +11,17 @@ import java.util.Map;
 
 public class Parser {
 
-    public static Map<String, Object> parseContent(String content, String fileName) throws IOException {
+    public static Map<String, Object> parseContent(String content, String format) throws IOException {
         if (content == null || content.isBlank()) {
             return new LinkedHashMap<>();
         }
 
-        String lowerName = fileName.toLowerCase();
-        if (lowerName.endsWith(".json")) {
+        if ("json".equalsIgnoreCase(format)) {
             return parseJson(content);
-        } else if (lowerName.endsWith(".yml") || lowerName.endsWith(".yaml")) {
+        } else if ("yml".equalsIgnoreCase(format) || "yaml".equalsIgnoreCase(format)) {
             return parseYaml(content);
         } else {
-            throw new IllegalArgumentException("Unsupported file format: " + fileName);
+            throw new IllegalArgumentException("Unsupported file format: " + format);
         }
     }
 

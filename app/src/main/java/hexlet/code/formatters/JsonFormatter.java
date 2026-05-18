@@ -2,7 +2,6 @@ package hexlet.code.formatters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.DiffEntry;
-import hexlet.code.Formatter;
 
 import java.util.LinkedHashMap;
 import java.util.List;

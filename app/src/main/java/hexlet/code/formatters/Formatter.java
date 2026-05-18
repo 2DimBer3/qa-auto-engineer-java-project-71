@@ -1,8 +1,6 @@
-package hexlet.code;
+package hexlet.code.formatters;
 
-import hexlet.code.formatters.JsonFormatter;
-import hexlet.code.formatters.PlainFormatter;
-import hexlet.code.formatters.StylishFormatter;
+import hexlet.code.DiffEntry;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.formatters.Formatter;
 import hexlet.code.formatters.JsonFormatter;
 import hexlet.code.formatters.PlainFormatter;
 import hexlet.code.formatters.StylishFormatter;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static hexlet.code.Differ.loadFile;
+import static hexlet.code.FileUtils.loadFile;
 import static hexlet.code.formatters.JsonFormatter.JSON_FORMAT;
 import static hexlet.code.formatters.PlainFormatter.PLAIN_FORMAT;
 import static hexlet.code.formatters.StylishFormatter.STYLISH_FORMAT;
