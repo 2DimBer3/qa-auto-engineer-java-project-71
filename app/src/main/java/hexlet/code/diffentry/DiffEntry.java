@@ -9,11 +9,11 @@ public abstract class DiffEntry {
         this.type = type;
     }
 
-    public String getKey() {
+    public final String getKey() {
         return key;
     }
 
-    public DiffEntryType getType() {
+    public final DiffEntryType getType() {
         return type;
     }
 }
