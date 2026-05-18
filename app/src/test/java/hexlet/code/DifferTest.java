@@ -63,12 +63,11 @@ class DifferTest {
     }
 
     @Test
-    void testEmptyFiles() {
-        Map<String, Object> data1 = Map.of();
-        Map<String, Object> data2 = Map.of();
-
-        List<DiffEntry> diff = DiffComputer.computeDiff(data1, data2);
-        String actual = new StylishFormatter().format(diff);
+    void testEmptyFiles() throws IOException {
+        String actual = Differ.generate(
+                getFixturePath("empty.json").toString(),
+                getFixturePath("empty.json").toString(),
+                "stylish");
         String expected = "{\n}";
 
         assertEquals(expected, actual);
