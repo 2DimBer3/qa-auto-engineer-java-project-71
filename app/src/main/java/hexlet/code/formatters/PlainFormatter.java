@@ -1,6 +1,7 @@
 package hexlet.code.formatters;
 
 import hexlet.code.diffentry.DiffEntry;
+import hexlet.code.diffentry.DiffEntryType;
 
 import java.util.List;
 
@@ -9,10 +10,6 @@ import static hexlet.code.diffentry.DiffEntryFields.NEW_VALUE;
 import static hexlet.code.diffentry.DiffEntryFields.OLD_VALUE;
 import static hexlet.code.diffentry.DiffEntryFields.TYPE;
 import static hexlet.code.diffentry.DiffEntryFields.VALUE;
-import static hexlet.code.diffentry.DiffEntryType.ADDED;
-import static hexlet.code.diffentry.DiffEntryType.CHANGED;
-import static hexlet.code.diffentry.DiffEntryType.REMOVED;
-import static hexlet.code.diffentry.DiffEntryType.UNCHANGED;
 
 public final class PlainFormatter implements Formatter {
 
@@ -22,7 +19,8 @@ public final class PlainFormatter implements Formatter {
     public String format(List<DiffEntry> diff) {
         StringBuilder sb = new StringBuilder();
         for (DiffEntry entry : diff) {
-            switch (entry.get(TYPE)) {
+            DiffEntryType type = (DiffEntryType) entry.get(TYPE);
+            switch (type) {
                 case UNCHANGED -> {
                 }
                 case CHANGED -> sb.append("Property '").append(entry.get(KEY)).append("' was updated. From ")
@@ -31,7 +29,7 @@ public final class PlainFormatter implements Formatter {
                 case REMOVED -> sb.append("Property '").append(entry.get(KEY)).append("' was removed").append("\n");
                 case ADDED -> sb.append("Property '").append(entry.get(KEY)).append("' was added with value: ")
                         .append(stringify(entry.get(VALUE))).append("\n");
-                default -> throw new IllegalArgumentException("Unknown type: " + entry.get(TYPE));
+                default -> throw new IllegalArgumentException("Unknown type: " + type);
             }
         }
 

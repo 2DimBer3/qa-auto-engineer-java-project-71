@@ -1,6 +1,7 @@
 package hexlet.code.formatters;
 
 import hexlet.code.diffentry.DiffEntry;
+import hexlet.code.diffentry.DiffEntryType;
 
 import java.util.List;
 
@@ -9,10 +10,6 @@ import static hexlet.code.diffentry.DiffEntryFields.NEW_VALUE;
 import static hexlet.code.diffentry.DiffEntryFields.OLD_VALUE;
 import static hexlet.code.diffentry.DiffEntryFields.TYPE;
 import static hexlet.code.diffentry.DiffEntryFields.VALUE;
-import static hexlet.code.diffentry.DiffEntryType.ADDED;
-import static hexlet.code.diffentry.DiffEntryType.CHANGED;
-import static hexlet.code.diffentry.DiffEntryType.REMOVED;
-import static hexlet.code.diffentry.DiffEntryType.UNCHANGED;
 
 public final class StylishFormatter implements Formatter {
 
@@ -22,7 +19,8 @@ public final class StylishFormatter implements Formatter {
     public String format(List<DiffEntry> diff) {
         StringBuilder sb = new StringBuilder("{\n");
         for (DiffEntry entry : diff) {
-            switch (entry.get(TYPE)) {
+            DiffEntryType type = (DiffEntryType) entry.get(TYPE);
+            switch (type) {
                 case UNCHANGED ->
                         sb.append("    ")
                                 .append(entry.get(KEY))
@@ -53,7 +51,7 @@ public final class StylishFormatter implements Formatter {
                                 .append(": ")
                                 .append(stringify(entry.get(VALUE)))
                                 .append("\n");
-                default -> throw new IllegalArgumentException("Unknown type: " + entry.get(TYPE));
+                default -> throw new IllegalArgumentException("Unknown type: " + type);
             }
         }
         sb.append("}");
