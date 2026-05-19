@@ -22,13 +22,14 @@ class DifferTest {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @CsvSource(delimiter = '|', textBlock = """
-             JSON                 | stylish | file1.json             | file2.json       | expected_diff.txt
-             YAML                 | stylish | file1.yml              | file2.yml        | expected_diff.txt
-             SameFiles            | stylish | same_file_1.json       | same_file_2.json | expected_diff_same_file.txt
-             First File Is Empty  | stylish | empty.yml              | file2.yml        | expected_diff_format_stylish_first_empty.txt
-             Second File Is Empty | json    | file1_test_format.json | empty.json       | expected_diff_format_json_second_empty.txt
-            """)
-    void testDiffFiles(String description, String format, String file1, String file2, String expectedFile) throws Exception {
+        JSON        | stylish | file1.json             | file2.json       | expected_diff.txt
+        YAML        | stylish | file1.yml              | file2.yml        | expected_diff.txt
+        SameFiles   | stylish | same_file_1.json       | same_file_2.json | expected_diff_same_file.txt
+        FirstEmpty  | stylish | empty.yml              | file2.yml        | expected_diff_format_stylish_first_empty.txt
+        SecondEmpty | json    | file1_test_format.json | empty.json       | expected_diff_format_json_second_empty.txt
+        """)
+    void testDiffFiles(String description, String format, String file1, String file2, String expectedFile)
+            throws Exception {
         Formatter formatter = Formatter.getFormatter(format);
         Map<String, Object> data1 = FileUtils.loadFile(getFixturePath(file1));
         Map<String, Object> data2 = FileUtils.loadFile(getFixturePath(file2));
@@ -42,12 +43,13 @@ class DifferTest {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @CsvSource(delimiter = '|', textBlock = """
-            Stylish format | stylish | expected_diff_format_stylish.txt
-            Plain format   | plain   | expected_diff_format_plain.txt
-            JSON format    | json    | expected_diff_format_json.txt
-            """)
+        Stylish format | stylish | expected_diff_format_stylish.txt
+        Plain format   | plain   | expected_diff_format_plain.txt
+        JSON format    | json    | expected_diff_format_json.txt
+        """)
     void testGenerateWithFormat(String description, String format, String expectedFile) throws IOException {
-        String actual = Differ.generate(getFixturePath("file1_test_format.json").toString(), getFixturePath("file2_test_format.json").toString(), format);
+        String actual = Differ.generate(getFixturePath("file1_test_format.json").toString(),
+                getFixturePath("file2_test_format.json").toString(), format);
 
         String expected = readFixtureFile(expectedFile);
         assertEquals(normalizeLineEndings(expected), normalizeLineEndings(actual), description);
@@ -55,7 +57,8 @@ class DifferTest {
 
     @Test
     void testGenerateDefaultStylish() throws IOException {
-        String actual = Differ.generate(getFixturePath("file1_test_format.json").toString(), getFixturePath("file2_test_format.json").toString());
+        String actual = Differ.generate(getFixturePath("file1_test_format.json").toString(),
+                getFixturePath("file2_test_format.json").toString());
         String expected = readFixtureFile("expected_diff_format_stylish.txt");
 
         assertEquals(normalizeLineEndings(expected), normalizeLineEndings(actual));
@@ -63,7 +66,8 @@ class DifferTest {
 
     @Test
     void testEmptyFiles() throws IOException {
-        String actual = Differ.generate(getFixturePath("empty.json").toString(), getFixturePath("empty.json").toString(), "stylish");
+        String actual = Differ.generate(getFixturePath("empty.json").toString(),
+                getFixturePath("empty.json").toString(), "stylish");
         String expected = "{\n}";
 
         assertEquals(expected, actual);
