@@ -1,19 +1,24 @@
 package hexlet.code.diffentry;
 
-public abstract class DiffEntry {
-    private final String key;
-    private final DiffEntryType type;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-    protected DiffEntry(String key, DiffEntryType type) {
-        this.key = key;
-        this.type = type;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public final class DiffEntry {
+    private final Map<String, Object> data = new LinkedHashMap<>();
+
+    public void put(DiffEntryFields field, Object value) {
+        data.put(field.toString(), value);
     }
 
-    public final String getKey() {
-        return key;
+    public Object get(DiffEntryFields field) {
+        return data.get(field.toString());
     }
 
-    public final DiffEntryType getType() {
-        return type;
+    @SuppressWarnings("unused")
+    @JsonValue
+    public Map<String, Object> getData() {
+        return data;
     }
 }

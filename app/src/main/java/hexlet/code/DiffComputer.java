@@ -1,8 +1,6 @@
 package hexlet.code;
 
 import hexlet.code.diffentry.DiffEntry;
-import hexlet.code.diffentry.DiffEntryChanged;
-import hexlet.code.diffentry.DiffEntrySimple;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +8,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static hexlet.code.diffentry.DiffEntryFields.NEW_VALUE;
+import static hexlet.code.diffentry.DiffEntryFields.OLD_VALUE;
+import static hexlet.code.diffentry.DiffEntryFields.TYPE;
+import static hexlet.code.diffentry.DiffEntryFields.KEY;
+import static hexlet.code.diffentry.DiffEntryFields.VALUE;
 import static hexlet.code.diffentry.DiffEntryType.UNCHANGED;
 import static hexlet.code.diffentry.DiffEntryType.CHANGED;
 import static hexlet.code.diffentry.DiffEntryType.REMOVED;
@@ -26,19 +29,28 @@ public class DiffComputer {
             boolean inFile1 = data1.containsKey(key);
             boolean inFile2 = data2.containsKey(key);
 
+            DiffEntry diffEntry = new DiffEntry();
+            diffEntry.put(KEY, key);
+
             if (inFile1 && inFile2) {
                 Object value1 = data1.get(key);
                 Object value2 = data2.get(key);
                 if (isEqual(value1, value2)) {
-                    entries.add(new DiffEntrySimple(key, UNCHANGED, value1));
+                    diffEntry.put(TYPE, UNCHANGED);
+                    diffEntry.put(VALUE, value1);
                 } else {
-                    entries.add(new DiffEntryChanged(key, CHANGED, value1, value2));
+                    diffEntry.put(TYPE, CHANGED);
+                    diffEntry.put(OLD_VALUE, value1);
+                    diffEntry.put(NEW_VALUE, value2);
                 }
             } else if (inFile1) {
-                entries.add(new DiffEntrySimple(key, REMOVED, data1.get(key)));
+                diffEntry.put(TYPE, REMOVED);
+                diffEntry.put(VALUE, data1.get(key));
             } else {
-                entries.add(new DiffEntrySimple(key, ADDED, data2.get(key)));
+                diffEntry.put(TYPE, ADDED);
+                diffEntry.put(VALUE, data2.get(key));
             }
+            entries.add(diffEntry);
         }
         return entries;
     }

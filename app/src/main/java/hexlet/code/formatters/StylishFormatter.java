@@ -1,10 +1,18 @@
 package hexlet.code.formatters;
 
-import hexlet.code.diffentry.DiffEntryChanged;
 import hexlet.code.diffentry.DiffEntry;
-import hexlet.code.diffentry.DiffEntrySimple;
 
 import java.util.List;
+
+import static hexlet.code.diffentry.DiffEntryFields.KEY;
+import static hexlet.code.diffentry.DiffEntryFields.NEW_VALUE;
+import static hexlet.code.diffentry.DiffEntryFields.OLD_VALUE;
+import static hexlet.code.diffentry.DiffEntryFields.TYPE;
+import static hexlet.code.diffentry.DiffEntryFields.VALUE;
+import static hexlet.code.diffentry.DiffEntryType.ADDED;
+import static hexlet.code.diffentry.DiffEntryType.CHANGED;
+import static hexlet.code.diffentry.DiffEntryType.REMOVED;
+import static hexlet.code.diffentry.DiffEntryType.UNCHANGED;
 
 public final class StylishFormatter implements Formatter {
 
@@ -14,25 +22,38 @@ public final class StylishFormatter implements Formatter {
     public String format(List<DiffEntry> diff) {
         StringBuilder sb = new StringBuilder("{\n");
         for (DiffEntry entry : diff) {
-            switch (entry.getType()) {
-                case UNCHANGED -> {
-                    DiffEntrySimple e = (DiffEntrySimple) entry;
-                    sb.append("    ").append(e.getKey()).append(": ").append(stringify(e.getValue())).append("\n");
-                }
+            switch (entry.get(TYPE)) {
+                case UNCHANGED ->
+                        sb.append("    ")
+                                .append(entry.get(KEY))
+                                .append(": ")
+                                .append(stringify(entry.get(VALUE)))
+                                .append("\n");
                 case CHANGED -> {
-                    DiffEntryChanged e = (DiffEntryChanged) entry;
-                    sb.append("  - ").append(e.getKey()).append(": ").append(stringify(e.getOldValue())).append("\n");
-                    sb.append("  + ").append(e.getKey()).append(": ").append(stringify(e.getNewValue())).append("\n");
+                    sb.append("  - ")
+                            .append(entry.get(KEY))
+                            .append(": ")
+                            .append(stringify(entry.get(OLD_VALUE)))
+                            .append("\n");
+                    sb.append("  + ")
+                            .append(entry.get(KEY))
+                            .append(": ")
+                            .append(stringify(entry.get(NEW_VALUE)))
+                            .append("\n");
                 }
-                case REMOVED -> {
-                    DiffEntrySimple e = (DiffEntrySimple) entry;
-                    sb.append("  - ").append(e.getKey()).append(": ").append(stringify(e.getValue())).append("\n");
-                }
-                case ADDED -> {
-                    DiffEntrySimple e = (DiffEntrySimple) entry;
-                    sb.append("  + ").append(e.getKey()).append(": ").append(stringify(e.getValue())).append("\n");
-                }
-                default -> throw new IllegalArgumentException("Unknown type: " + entry.getType());
+                case REMOVED ->
+                        sb.append("  - ")
+                                .append(entry.get(KEY))
+                                .append(": ")
+                                .append(stringify(entry.get(VALUE)))
+                                .append("\n");
+                case ADDED ->
+                        sb.append("  + ")
+                                .append(entry.get(KEY))
+                                .append(": ")
+                                .append(stringify(entry.get(VALUE)))
+                                .append("\n");
+                default -> throw new IllegalArgumentException("Unknown type: " + entry.get(TYPE));
             }
         }
         sb.append("}");

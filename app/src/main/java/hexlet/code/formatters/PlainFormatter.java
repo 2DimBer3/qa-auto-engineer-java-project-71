@@ -1,10 +1,18 @@
 package hexlet.code.formatters;
 
-import hexlet.code.diffentry.DiffEntryChanged;
 import hexlet.code.diffentry.DiffEntry;
-import hexlet.code.diffentry.DiffEntrySimple;
 
 import java.util.List;
+
+import static hexlet.code.diffentry.DiffEntryFields.KEY;
+import static hexlet.code.diffentry.DiffEntryFields.NEW_VALUE;
+import static hexlet.code.diffentry.DiffEntryFields.OLD_VALUE;
+import static hexlet.code.diffentry.DiffEntryFields.TYPE;
+import static hexlet.code.diffentry.DiffEntryFields.VALUE;
+import static hexlet.code.diffentry.DiffEntryType.ADDED;
+import static hexlet.code.diffentry.DiffEntryType.CHANGED;
+import static hexlet.code.diffentry.DiffEntryType.REMOVED;
+import static hexlet.code.diffentry.DiffEntryType.UNCHANGED;
 
 public final class PlainFormatter implements Formatter {
 
@@ -14,21 +22,16 @@ public final class PlainFormatter implements Formatter {
     public String format(List<DiffEntry> diff) {
         StringBuilder sb = new StringBuilder();
         for (DiffEntry entry : diff) {
-            switch (entry.getType()) {
-                case UNCHANGED -> { }
-                case CHANGED -> {
-                    DiffEntryChanged e = (DiffEntryChanged) entry;
-                    sb.append("Property '").append(entry.getKey()).append("' was updated. From ")
-                            .append(stringify(e.getOldValue())).append(" to ")
-                            .append(stringify(e.getNewValue())).append("\n");
+            switch (entry.get(TYPE)) {
+                case UNCHANGED -> {
                 }
-                case REMOVED -> sb.append("Property '").append(entry.getKey()).append("' was removed").append("\n");
-                case ADDED -> {
-                    DiffEntrySimple e = (DiffEntrySimple) entry;
-                    sb.append("Property '").append(entry.getKey()).append("' was added with value: ")
-                            .append(stringify(e.getValue())).append("\n");
-                }
-                default -> throw new IllegalArgumentException("Unknown type: " + entry.getType());
+                case CHANGED -> sb.append("Property '").append(entry.get(KEY)).append("' was updated. From ")
+                        .append(stringify(entry.get(OLD_VALUE))).append(" to ")
+                        .append(stringify(entry.get(NEW_VALUE))).append("\n");
+                case REMOVED -> sb.append("Property '").append(entry.get(KEY)).append("' was removed").append("\n");
+                case ADDED -> sb.append("Property '").append(entry.get(KEY)).append("' was added with value: ")
+                        .append(stringify(entry.get(VALUE))).append("\n");
+                default -> throw new IllegalArgumentException("Unknown type: " + entry.get(TYPE));
             }
         }
 
