@@ -2,13 +2,11 @@ package hexlet.code;
 
 import hexlet.code.diffentry.DiffEntry;
 import hexlet.code.formatters.Formatter;
-import hexlet.code.formatters.JsonFormatter;
 import hexlet.code.formatters.PlainFormatter;
 import hexlet.code.formatters.StylishFormatter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,47 +15,47 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
-import static hexlet.code.FileUtils.loadFile;
-import static hexlet.code.formatters.JsonFormatter.JSON_FORMAT;
-import static hexlet.code.formatters.PlainFormatter.PLAIN_FORMAT;
-import static hexlet.code.formatters.StylishFormatter.STYLISH_FORMAT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DifferTest {
 
-    @ParameterizedTest(name = "{0})")
-    @MethodSource("testDiffGenerationWithFormatterTestData")
-    void testDiffGenerationWithFormatter(String description, String file1, String file2,
-                                         String expectedFile, Formatter formatter) throws IOException {
-        Map<String, Object> data1 = loadFile(getFixturePath(file1));
-        Map<String, Object> data2 = loadFile(getFixturePath(file2));
-
+    @ParameterizedTest(name = "[{index}] {0}")
+    @CsvSource(delimiter = '|', textBlock = """
+             JSON                 | stylish | file1.json             | file2.json       | expected_diff.txt
+             YAML                 | stylish | file1.yml              | file2.yml        | expected_diff.txt
+             SameFiles            | stylish | same_file_1.json       | same_file_2.json | expected_diff_same_file.txt
+             First File Is Empty  | stylish | empty.yml              | file2.yml        | expected_diff_format_stylish_first_empty.txt
+             Second File Is Empty | json    | file1_test_format.json | empty.json       | expected_diff_format_json_second_empty.txt
+            """)
+    void testDiffFiles(String description, String format, String file1, String file2, String expectedFile) throws Exception {
+        Formatter formatter = Formatter.getFormatter(format);
+        Map<String, Object> data1 = FileUtils.loadFile(getFixturePath(file1));
+        Map<String, Object> data2 = FileUtils.loadFile(getFixturePath(file2));
         List<DiffEntry> diff = DiffComputer.computeDiff(data1, data2);
+
         String actual = formatter.format(diff);
         String expected = readFixtureFile(expectedFile);
 
         assertEquals(normalizeLineEndings(expected), normalizeLineEndings(actual), description);
     }
 
-    @ParameterizedTest(name = "{0}")
-    @MethodSource("testGenerateWithFormatTestData")
-    void testGenerateWithFormat(String description, String format,
-                                String expectedFile) throws IOException {
-        String actual = Differ.generate(
-                getFixturePath("file1_test_format.json").toString(),
-                getFixturePath("file2_test_format.json").toString(),
-                format);
-        String expected = readFixtureFile(expectedFile);
+    @ParameterizedTest(name = "[{index}] {0}")
+    @CsvSource(delimiter = '|', textBlock = """
+            Stylish format | stylish | expected_diff_format_stylish.txt
+            Plain format   | plain   | expected_diff_format_plain.txt
+            JSON format    | json    | expected_diff_format_json.txt
+            """)
+    void testGenerateWithFormat(String description, String format, String expectedFile) throws IOException {
+        String actual = Differ.generate(getFixturePath("file1_test_format.json").toString(), getFixturePath("file2_test_format.json").toString(), format);
 
+        String expected = readFixtureFile(expectedFile);
         assertEquals(normalizeLineEndings(expected), normalizeLineEndings(actual), description);
     }
 
     @Test
     void testGenerateDefaultStylish() throws IOException {
-        String actual = Differ.generate(getFixturePath("file1_test_format.json").toString(),
-                getFixturePath("file2_test_format.json").toString());
+        String actual = Differ.generate(getFixturePath("file1_test_format.json").toString(), getFixturePath("file2_test_format.json").toString());
         String expected = readFixtureFile("expected_diff_format_stylish.txt");
 
         assertEquals(normalizeLineEndings(expected), normalizeLineEndings(actual));
@@ -65,10 +63,7 @@ class DifferTest {
 
     @Test
     void testEmptyFiles() throws IOException {
-        String actual = Differ.generate(
-                getFixturePath("empty.json").toString(),
-                getFixturePath("empty.json").toString(),
-                "stylish");
+        String actual = Differ.generate(getFixturePath("empty.json").toString(), getFixturePath("empty.json").toString(), "stylish");
         String expected = "{\n}";
 
         assertEquals(expected, actual);
@@ -117,38 +112,10 @@ class DifferTest {
     }
 
     private static Path getFixturePath(String fileName) {
-        return Paths.get("src", "test", "resources", "fixtures", fileName)
-                .toAbsolutePath().normalize();
+        return Paths.get("src", "test", "resources", "fixtures", fileName).toAbsolutePath().normalize();
     }
 
     private static String normalizeLineEndings(String s) {
         return s.replace("\r\n", "\n").replace("\r", "\n");
-    }
-
-    private static Stream<Arguments> testDiffGenerationWithFormatterTestData() {
-        return Stream.of(
-                Arguments.of("JSON", "file1.json", "file2.json", "expected_diff.txt", new StylishFormatter()),
-                Arguments.of("YAML", "file1.yml", "file2.yml", "expected_diff.txt", new StylishFormatter()),
-                Arguments.of("SameFiles", "same_file_1.json", "same_file_2.json",
-                        "expected_diff_same_file.txt", new StylishFormatter()),
-                Arguments.of("StylishFormat", "file1_test_format.json", "file2_test_format.json",
-                        "expected_diff_format_stylish.txt", new StylishFormatter()),
-                Arguments.of("PlainFormat", "file1_test_format.json", "file2_test_format.json",
-                        "expected_diff_format_plain.txt", new PlainFormatter()),
-                Arguments.of("JsonFormat", "file1_test_format.json", "file2_test_format.json",
-                        "expected_diff_format_json.txt", new JsonFormatter()),
-                Arguments.of("StylishFormat: First File Is Empty", "empty.yml", "file2.yml",
-                        "expected_diff_format_stylish_first_empty.txt", new StylishFormatter()),
-                Arguments.of("JsonFormat: Second File Is Empty", "file1_test_format.json", "empty.json",
-                        "expected_diff_format_json_second_empty.txt", new JsonFormatter())
-        );
-    }
-
-    private static Stream<Arguments> testGenerateWithFormatTestData() {
-        return Stream.of(
-                Arguments.of("Stylish format", STYLISH_FORMAT, "expected_diff_format_stylish.txt"),
-                Arguments.of("Plain format", PLAIN_FORMAT, "expected_diff_format_plain.txt"),
-                Arguments.of("JSON format", JSON_FORMAT, "expected_diff_format_json.txt")
-        );
     }
 }
